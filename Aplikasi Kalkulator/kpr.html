@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <title>KALKULATOR by Moesleyboys - Kpr</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="icon" href="logo-moesleyboys.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="loader"><div class="logo"><img src="logo-moesleyboys.png" alt="Moesleyboys"></div></div>
+<div class="container">
+  <div class="header">
+    <div class="brand">
+      <div class="logo-wrap"><img src="logo-moesleyboys.png" alt="logo"></div>
+      <div>
+        <h1>KALKULATOR by Moesleyboys</h1>
+        <div class="lead">Kalkulator modern — luas bangun datar & simulasi KPR</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="version">Versi: 3.0</div>
+      <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+        <div class="dot" aria-hidden="true"></div>
+      </button>
+    </div>
+  </div>
+
+<form class="grid" novalidate>
+  <label>Harga Rumah (Rp)</label>
+  <input class="input" type="number" step="any" name="harga" required>
+  <div class="row-2">
+    <div><label>Uang Muka / DP (Rp)</label><input class="input" type="number" step="any" name="dp" required></div>
+    <div><label>Suku Bunga (% per tahun)</label><input class="input" type="number" step="any" name="bunga" required></div>
+  </div>
+  <label>Lama Cicilan (tahun)</label>
+  <input class="input" type="number" step="1" name="tenor" required>
+  <input class="button" type="submit" name="hitung" value="Hitung">
+</form>
+
+<div id="resultContainer" class="result" style="display:none;">
+  <table class="table" role="table">
+    <tr><th>Harga Rumah</th><td id="hargaValue"></td></tr>
+    <tr><th>Uang Muka (DP)</th><td id="dpValue"></td></tr>
+    <tr><th>Pinjaman</th><td id="pinjamanValue"></td></tr>
+    <tr><th>Suku Bunga (tahun)</th><td id="bungaValue"></td></tr>
+    <tr><th>Lama Cicilan</th><td id="bulanValue"></td></tr>
+    <tr><th>Angsuran per bulan</th><td><strong id="angsuranValue"></strong></td></tr>
+  </table>
+</div>
+
+  <div class="footer">
+    Dibuat untuk pembelajaran — cocok dijalankan di server lokal (XAMPP / Laragon)<br>
+    © 2025 <strong>Moesleyboys</strong>. All rights reserved.
+  </div>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    const resultContainer = document.getElementById('resultContainer');
+    
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const harga = parseFloat(form.harga.value);
+      const dp = parseFloat(form.dp.value);
+      const bunga = parseFloat(form.bunga.value);
+      const tenor = parseFloat(form.tenor.value);
+      
+      if (isNaN(harga) || isNaN(dp) || isNaN(bunga) || isNaN(tenor)) {
+        alert('Masukkan nilai yang valid untuk semua field');
+        return;
+      }
+      
+      // Hitung KPR
+      const pinjaman = Math.max(0, harga - dp);
+      const bungaBulan = (bunga / 100) / 12;
+      const bulan = Math.max(1, Math.floor(tenor * 12));
+      
+      let angsuran;
+      if (bungaBulan === 0) {
+        angsuran = pinjaman / bulan;
+      } else {
+        angsuran = (pinjaman * bungaBulan) / (1 - Math.pow(1 + bungaBulan, -bulan));
+      }
+      
+      // Format angka ke format Rupiah
+      function formatRupiah(angka) {
+        return 'Rp ' + angka.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+      }
+      
+      // Tampilkan hasil
+      document.getElementById('hargaValue').textContent = formatRupiah(harga);
+      document.getElementById('dpValue').textContent = formatRupiah(dp);
+      document.getElementById('pinjamanValue').textContent = formatRupiah(pinjaman);
+      document.getElementById('bungaValue').textContent = bunga + ' %';
+      document.getElementById('bulanValue').textContent = bulan + ' bulan';
+      document.getElementById('angsuranValue').textContent = formatRupiah(angsuran);
+      
+      resultContainer.style.display = 'block';
+    });
+  });
+</script>
+<script src="script.js"></script>
+</body>
+</html>

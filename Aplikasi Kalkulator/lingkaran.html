@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <title>KALKULATOR by Moesleyboys - Lingkaran</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="icon" href="logo-moesleyboys.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="loader"><div class="logo"><img src="logo-moesleyboys.png" alt="Moesleyboys"></div></div>
+<div class="container">
+  <div class="header">
+    <div class="brand">
+      <div class="logo-wrap"><img src="logo-moesleyboys.png" alt="logo"></div>
+      <div>
+        <h1>KALKULATOR by Moesleyboys</h1>
+        <div class="lead">Kalkulator modern — luas bangun datar & simulasi KPR</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="version">Versi: 3.0</div>
+      <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+        <div class="dot" aria-hidden="true"></div>
+      </button>
+    </div>
+  </div>
+
+<form class="grid" novalidate>
+  <label>Jari-jari (r)</label>
+  <input class="input" type="number" step="any" name="jari" required>
+  <input class="button" type="submit" name="hitung" value="Hitung">
+</form>
+
+<div id="resultContainer" class="result" style="display:none;">
+  Luas = π × r² = π × <span id="jariValue"></span>² = <strong id="hasilValue"></strong>
+</div>
+
+  <div class="footer">
+    Dibuat untuk pembelajaran — cocok dijalankan di server lokal (XAMPP / Laragon)<br>
+    © 2025 <strong>Moesleyboys</strong>. All rights reserved.
+  </div>
+</div>
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form');
+    const resultContainer = document.getElementById('resultContainer');
+    const jariValue = document.getElementById('jariValue');
+    const hasilValue = document.getElementById('hasilValue');
+    
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const jari = parseFloat(form.jari.value);
+      
+      if (isNaN(jari)) {
+        alert('Masukkan nilai yang valid untuk jari-jari');
+        return;
+      }
+      
+      const hasil = Math.PI * Math.pow(jari, 2);
+      
+      jariValue.textContent = jari;
+      hasilValue.textContent = hasil.toFixed(4);
+      
+      resultContainer.style.display = 'block';
+    });
+  });
+</script>
+<script src="script.js"></script>
+</body>
+</html>
